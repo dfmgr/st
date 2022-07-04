@@ -60,7 +60,7 @@ REPORAW="$REPO/raw/$REPO_BRANCH"
 APPVERSION="$(__appversion "$REPORAW/version.txt")"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Setup plugins
-PLUGNAMES="st-distrotube"
+PLUGNAMES="source"
 PLUGDIR="${SHARE:-$HOME/.local/share}/$APPNAME"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Require a version higher than
@@ -137,10 +137,10 @@ fi
 # Plugins
 if am_i_online; then
   if [ "$PLUGNAMES" != "" ]; then
-    if [ -d "$PLUGDIR/st-distrotube/.git" ]; then
-      execute "git_update $PLUGDIR/st-distrotube" "Updating plugin st-distrotube"
+    if [ -d "$PLUGDIR/source/.git" ]; then
+      execute "git_update $PLUGDIR/st-distrotube" "Updating plugin source"
     else
-      execute "git_clone https://gitlab.com/dwt1/st-distrotube $PLUGDIR/st-distrotube" "Installing plugin st-distrotube"
+      execute "git_clone https://gitlab.com/dwt1/st-distrotube $PLUGDIR/source" "Installing plugin source"
     fi
   fi
   # exit on fail
@@ -150,9 +150,11 @@ fi
 # run post install scripts
 run_postinst() {
   dfmgr_run_post
-  if ! cmd_exits st && [[ -f "$INSTDIR/build.sh" ]]; then
-    if builtin cd "$PLUGDIR/st-distrotube"; then
-      export BUILD_SRC_DIR="$PLUGDIR/st-distrotube"
+  if ! cmd_exits "$APPNAME" && [[ -f "$INSTDIR/build.sh" ]]; then
+    if builtin cd "$PLUGDIR/source"; then
+      BUILD_SRC_DIR="$PLUGDIR/source"
+      BUILD_SRC_URL="https://gitlab.com/dwt1/st-distrotube"
+      export BUILD_SRC_DIR BUILD_SRC_URL
       eval "$INSTDIR/build.sh"
     fi
   fi
