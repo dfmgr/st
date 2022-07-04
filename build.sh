@@ -121,7 +121,7 @@ if [[ -d "$BUILD_SRC_DIR" ]]; then
       sed -i 's|PREFIX =.*|PREFIX = '$BUILD_DESTDIR'|g' "./config.mk"
   fi
   if [[ -f "Makefile" ]]; then
-    sudo make clean install DESTDIR="$BUILD_DESTDIR" | tee -a "$BUILD_LOG_FILE" &>/dev/null
+    sudo make clean install DESTDIR="$BUILD_DESTDIR" 2>&1 | tee -a "$BUILD_LOG_FILE" &>/dev/null
   fi
   if [[ -f "$BUILD_LOG_FILE" ]]; then
     errors="$(grep 'fatal error' "$BUILD_LOG_FILE" || echo '')"
@@ -129,6 +129,7 @@ if [[ -d "$BUILD_SRC_DIR" ]]; then
       printf_color "$RED" "The following errors have occurred:"
       echo -e "$errors"
     else
+      rm -Rf "$BUILD_LOG_FILE" &>/dev/null
       printf_color "$GREEN" "Build of st has completed without error"
     fi
   fi
