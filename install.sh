@@ -150,7 +150,7 @@ fi
 # run post install scripts
 run_postinst() {
   dfmgr_run_post
-  if ! cmd_exits "$APPNAME" && [[ -f "$INSTDIR/build.sh" ]]; then
+  if ! cmd_exists "$APPNAME" && [[ -f "$INSTDIR/build.sh" ]]; then
     if builtin cd "$PLUGDIR/source"; then
       BUILD_SRC_DIR="$PLUGDIR/source"
       BUILD_SRC_URL="https://gitlab.com/dwt1/st-distrotube"
